@@ -48,8 +48,8 @@ export const ReadTasks: React.FC = () => {
 
   return (
     <section className="p-3">
-      {taskStore.taskCreate && <CreateTask />}
-      {taskStore.taskUpdate && <UpdateTask />}
+      {taskStore.taskCreate && <CreateTask refreshTask={fetchTasks} />}
+      {taskStore.taskUpdate && <UpdateTask refreshTask={fetchTasks} />}
       <article className="d-flex align-items-center justify-content-between">
         <h2>Tasks</h2>
         <button

@@ -10,7 +10,11 @@ type taskType = {
   status: string;
 };
 
-export const UpdateTask: React.FC = () => {
+interface updateTaskProps {
+  refreshTask: () => void;
+}
+
+export const UpdateTask: React.FC<updateTaskProps> = ({ refreshTask }) => {
   const taskStore = useTaskStore((state) => state);
   const { handleSubmit, register } = useForm<taskType>();
 
@@ -35,7 +39,7 @@ export const UpdateTask: React.FC = () => {
       if (!response.ok) {
         throw new Error(`Failed to update task: ${response.statusText}`);
       }
-      console.log("Update task: " + data.date);
+      refreshTask();
       toast.success("Task updated successfully");
     } catch (error) {
       console.error(error);

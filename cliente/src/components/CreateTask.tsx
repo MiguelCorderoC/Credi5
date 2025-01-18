@@ -10,7 +10,11 @@ type taskType = {
   status: string;
 };
 
-export const CreateTask: React.FC = () => {
+interface createTaskProps {
+  refreshTask: () => void;
+}
+
+export const CreateTask: React.FC<createTaskProps> = ({ refreshTask }) => {
   const { handleSubmit, register } = useForm<taskType>();
   const taskStore = useTaskStore((state) => state);
 
@@ -23,6 +27,7 @@ export const CreateTask: React.FC = () => {
         },
         body: JSON.stringify(data),
       });
+      refreshTask();
       toast.success("Task registered");
     } catch (error) {
       console.error(error);
