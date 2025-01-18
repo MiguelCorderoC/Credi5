@@ -21,8 +21,9 @@ const taskController = {
 
   insertTask: async (req, res) => {
     const { name, description, date, status } = req.body;
-    console.log("Post");
-    console.log(req.body);
+    if (!name || !description || !date || !status) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
     try {
       const task = await taskModel.insertTask(name, description, date, status);
       res.send(task);
@@ -34,8 +35,6 @@ const taskController = {
   updateTask: async (req, res) => {
     const id = req.params.id;
     const { name, description, date, status } = req.body;
-    console.log("Put:");
-    console.log(req.body);
     try {
       const task = await taskModel.updateTask(
         id,
