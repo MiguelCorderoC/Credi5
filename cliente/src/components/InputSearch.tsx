@@ -8,10 +8,10 @@ export const InputSearch: React.FC = () => {
       taskStore.taskArray.filter(
         (task) =>
           task.id.toString().includes(value) ||
-          task.name.toLowerCase().includes(value) ||
-          task.description.toLowerCase().includes(value) ||
-          task.due_date.toLowerCase().includes(value) ||
-          task.status.toLowerCase().includes(value)
+          task.name.toLowerCase().includes(value.toLowerCase()) ||
+          task.description.toLowerCase().includes(value.toLowerCase()) ||
+          task.due_date.toLowerCase().includes(value.toLowerCase()) ||
+          task.status.toLowerCase().includes(value.toLowerCase())
       )
     );
   };
