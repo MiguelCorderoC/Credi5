@@ -15,7 +15,11 @@ interface createTaskProps {
 }
 
 export const CreateTask: React.FC<createTaskProps> = ({ refreshTask }) => {
-  const { handleSubmit, register } = useForm<taskType>();
+  const {
+    formState: { errors },
+    handleSubmit,
+    register,
+  } = useForm<taskType>();
   const taskStore = useTaskStore((state) => state);
 
   const onSubmit = async (data: taskType) => {
@@ -55,18 +59,33 @@ export const CreateTask: React.FC<createTaskProps> = ({ refreshTask }) => {
       <article className="card-body">
         <div>
           <label>Name</label>
-          <input {...register("name")} type="text" className="form-control" />
+          <input
+            {...register("name", {
+              required: "Field required",
+            })}
+            type="text"
+            className={`form-control ${errors.name && "is-invalid"}`}
+          />
+          {errors.name && <span className="text-danger">Field required</span>}
         </div>
         <div>
           <label>Description</label>
           <textarea
-            {...register("description")}
-            className="form-control"
+            {...register("description", { required: "Field required" })}
+            className={`form-control ${errors.description && "is-invalid"}`}
           ></textarea>
+          {errors.description && (
+            <span className="text-danger">Field required</span>
+          )}
         </div>
         <div>
           <label>Date due</label>
-          <input {...register("date")} type="date" className="form-control" />
+          <input
+            {...register("date", { required: "Field required" })}
+            type="date"
+            className={`form-control ${errors.date && "is-invalid"}`}
+          />
+          {errors.date && <span className="text-danger">Field required</span>}
         </div>
         <div>
           <label>Status</label>

@@ -1,19 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { CreateTask } from "./CreateTask";
 import { useTaskStore } from "../store/taskStore";
 import toast from "react-hot-toast";
 import { UpdateTask } from "./UpdateTask";
-
-type taskTypes = {
-  id: number;
-  name: string;
-  description: string;
-  due_date: string;
-  status: string;
-};
+import { InputSearch } from "./InputSearch";
 
 export const ReadTasks: React.FC = () => {
-  const [tasks, setTasks] = useState<taskTypes[]>([]);
   const taskStore = useTaskStore((state) => state);
 
   const fetchTasks = async () => {
@@ -23,7 +15,8 @@ export const ReadTasks: React.FC = () => {
         throw new Error(`http error! Status: ${response.status}`);
       }
       const data = await response.json();
-      setTasks(data);
+      taskStore.setTaskArray(data);
+      taskStore.setTaskArrayFilter(data);
     } catch (error) {
       console.error("Error fetching tasks:", error);
     }
@@ -52,14 +45,17 @@ export const ReadTasks: React.FC = () => {
       {taskStore.taskUpdate && <UpdateTask refreshTask={fetchTasks} />}
       <article className="d-flex align-items-center justify-content-between">
         <h2>Tasks</h2>
-        <button
-          onClick={() => {
-            taskStore.setTaskCreate(true);
-          }}
-          className="btn btn-success"
-        >
-          New task
-        </button>
+        <article className="d-flex align-items-center justify-content-between gap-2">
+          <InputSearch />
+          <button
+            onClick={() => {
+              taskStore.setTaskCreate(true);
+            }}
+            className="btn btn-success text-nowrap"
+          >
+            New task
+          </button>
+        </article>
       </article>
       <article>
         <table className="table table-striped table-sm">
@@ -74,7 +70,7 @@ export const ReadTasks: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {tasks.map((item, index) => (
+            {taskStore.taskArrayFilter.map((item, index) => (
               <tr key={index} className="align-middle">
                 <td scope="row">{item.id}</td>
                 <td scope="row">{item.name}</td>
@@ -109,6 +105,13 @@ export const ReadTasks: React.FC = () => {
                 </td>
               </tr>
             ))}
+            {taskStore.taskArrayFilter.length == 0 && (
+              <tr>
+                <td colSpan={6} className="text-center">
+                  No records
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </article>
